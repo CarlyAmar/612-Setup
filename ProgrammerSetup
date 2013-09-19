@@ -1,0 +1,83 @@
+#!/bin/bash
+repo="612-2013"
+echo "what is your username"
+read username
+echo "what is your github email address"
+read email
+echo "Go to Github and fork Anirudh's repository for this year called"
+echo $repo
+echo "press enter to continue"
+read -s continue
+echo "is git installed [y] [n]"
+read installed
+if [ $installed == n ] ; then
+    echo "please install git and press enter to continue"
+    read $continue
+fi
+WPUT()
+{
+  wget "http://sourceforge.net/projects/wput/files/wput/0.6/wput_0.6-1_i386.deb/download?use_mirror=hivelocity&download=" -O wput.deb
+}
+WINE()
+{
+  sudo add-apt-repository ppa:ubuntu-wine/ppa
+  sudo apt-get update
+  sudo apt-get install wine1.5
+}
+SSH()
+{
+  ssh-keygen -C $email
+  echo "your code is:"
+  cat ~/.ssh/id_rsa.pub
+  echo "Press enter when code is pasted to github"
+  read -s continue
+  ssh-add
+  ssh -vT git@github.com
+  echo "did keygen work? [y] [n]"
+  read keygen
+  if [ $keygen == n ] ; then
+      exit
+  fi
+}
+GitConfig()
+{
+  echo "what is your name"
+  read $name
+  git config --global user.name $name
+  git config --global user.email "$email"
+}
+GitRepo()
+{
+  git clone git@github.com:$username/$repo
+    #echo "1"
+  cd $repo
+    #echo "2"
+  git remote add upstream git://github.com/anidev/$repo.git
+    #echo "3"
+  git pull upstream master
+    #echo "4"
+}
+UCPP()
+{
+  echo "Is this Ubuntu or a debian-based OS (uses apt-get) [y] [n]"
+  read Ubuntu
+  if [ $Ubuntu == "n" ] ; then
+    exit
+  fi
+  WINE
+  git clone git@github.com:anidev/ucpp
+  echo "1"
+  sudo echo "\"export PATH=\"$PATH:~/robotics/ucpp/ucpp" >> ~/.bashrc
+  echo "2"
+  ucpp setup -t 612
+  echo "3"
+  ucpp init
+  echo "4"
+  ucpp configure
+  echo "5"
+}
+
+#SSH
+#GitConfig
+#GitRepo
+UCPP
