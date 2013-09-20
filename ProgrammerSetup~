@@ -19,15 +19,15 @@ WPUT()
   which apt-get > /dev/null 2>&1
   if [ $? =="1" ] ; then
     wget "http://sourceforge.net/projects/wput/files/wput/0.6/wput_0.6-1_i386.deb/download?use_mirror=hivelocity&download=" -O wput.deb
-    sudo dpkg -i wput.deb
-    sudo apt-get install python2
-    wget http://sourceforge.net/projects/tcl/files/Tcl/8.4.20/tcl8.4.20-src.tar.gz/download?use_mirror=hivelocity -0 tcl.tar.gz
-    tar -x tcl.tar.gz
-    git clone git@github:jkbr/httpie
-    cd httpie
-    ./configure
-    sudo make
-    sudo make installed
++    sudo dpkg -i wput.deb
++    sudo apt-get install python2
++    wget http://sourceforge.net/projects/tcl/files/Tcl/8.4.20/tcl8.4.20-src.tar.gz/download?use_mirror=hivelocity -0 tcl.tar.gz
++    tar -x tcl.tar.gz
++    git clone git@github:jkbr/httpie
++    cd httpie
++    ./configure
++    sudo make
++    sudo make installed
     fi
 }
 WINE()
