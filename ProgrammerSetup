@@ -16,8 +16,8 @@ if [ $installed == n ] ; then
 fi
 WPUT()
 {
-  which apt-get > /dev/null 2>&1
-  if [ $? =="1" ] ; then
+    which apt-get > /dev/null 2>&1
+    if [ $? =="1" ] ; then
     wget "http://sourceforge.net/projects/wput/files/wput/0.6/wput_0.6-1_i386.deb/download?use_mirror=hivelocity&download=" -O wput.deb
     sudo dpkg -i wput.deb
     sudo apt-get install python2
@@ -32,63 +32,62 @@ WPUT()
 }
 WINE()
 {
-  which apt-get > /dev/null 2>&1
-  if [ $? == "1" ] ; then
+    which apt-get > /dev/null 2>&1
+    if [ $? == "1" ] ; then
     sudo add-apt-repository ppa:ubuntu-wine/ppa
     sudo apt-get update
     sudo apt-get install wine1.5
-  fi
-  which yum > /dev/null 2>&1
-  if [ $? == "1" ] ; then
-      sudo yum install wine
-  fi
-  which zypper > /dev/null 2>&1
-  if [ $? == "1" ] ; then
-      sudo zypper install wine
-  fi
-  which pacman > /dev/null 2>&1
-  if [ $? == "1" ] ; then
-      sudo pacman -S wine
-  fi
+    fi
+    which yum > /dev/null 2>&1
+    if [ $? == "1" ] ; then
+        sudo yum install wine
+    fi
+    which zypper > /dev/null 2>&1
+    if [ $? == "1" ] ; then
+        sudo zypper install wine
+    fi
+    which pacman > /dev/null 2>&1
+    if [ $? == "1" ] ; then
+        sudo pacman -S wine
+    fi  
 }
 SSH()
 {
-  ssh-keygen -C $email
-  echo "your code is:"
-  cat ~/.ssh/id_rsa.pub
-  echo "Press enter when code is pasted to github"
-  read -s continue
-  ssh-add
-  ssh -vT git@github.com
-  echo "did keygen work? [y] [n]"
-  read keygen
-  if [ $keygen == n ] ; then
-      exit
-  fi
+    ssh-keygen -C $email
+    echo "your code is:"
+    cat ~/.ssh/id_rsa.pub
+    echo "Press enter when code is pasted to github"
+    read -s continue
+    ssh-add
+    ssh -vT git@github.com
+    echo "did keygen work? [y] [n]"
+    read keygen
+    if [ $keygen == n ] ; then
+        exit
+    fi
 }
 GitConfig()
 {
-  echo "what is your name"
-  read $name
-  git config --global user.name $name
-  git config --global user.email "$email"
-}
+    echo "what is your name"
+    read $name
+    git config --global user.name $name
+    git config --global user.email "$email"
+}   
 GitRepo()
 {
-  git clone git@github.com:$username/$repo
-  cd $repo
-  git remote add upstream git://github.com/anidev/$repo.git
-  git pull upstream master
+    git clone git@github.com:$username/$repo
+    cd $repo
+    git remote add upstream git://github.com/anidev/$repo.git
+    git pull upstream master
 }
 UCPP()
 {
-  WINE
-  fi
-  git clone git@github.com:anidev/ucpp
-  sudo echo "\"export PATH=\"$PATH:~/robotics/ucpp/ucpp" >> ~/.bashrc
-  ucpp setup -t 612
-  ucpp init
-  ucpp configure
+    WINE
+    git clone git@github.com:anidev/ucpp
+    sudo echo "\"export PATH=\"$PATH:~/robotics/ucpp/ucpp" >> ~/.bashrc
+    ucpp setup -t 612
+    ucpp init
+    ucpp configure
 }
 
 #SSH
