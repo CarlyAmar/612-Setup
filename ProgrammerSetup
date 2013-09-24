@@ -19,9 +19,20 @@ gitCheck()
         if [ $? == "1" ] ; then
             sudo apt-get install git
         fi
+        which yum > /dev/null 2>&1
+        fi [ $? == "1" ] ; then
+            sudo yum install git
+        fi
+        which zypper > /dev/null 2>&1
+        if [ $? == "1" ] ; then
+            sudo zypper install git
+        fi
+        which pacman > /dev/null 2>&1
+        if [ $? == "1" ] ; then
+            sudo pacman -S git
+        fi  
     fi
 }
-gitCheck
 WPUT()
 {
     which apt-get > /dev/null 2>&1
@@ -91,13 +102,17 @@ GitRepo()
 UCPP()
 {
     WINE
+    Wput
+    Python2
+    Tcl
+    Curl
     git clone git@github.com:anidev/ucpp
     sudo echo "\"export PATH=\"$PATH:~/robotics/ucpp/ucpp" >> ~/.bashrc
     ucpp setup -t 612
     ucpp init
     ucpp configure
 }
-
+#gitCheck
 #SSH
 #GitConfig
 #GitRepo
