@@ -8,36 +8,20 @@ echo "Go to Github and fork Anirudh's repository for this year called"
 echo $repo
 echo "press [enter] to continue"
 read -s continue
-gitCheck() 
+gitCheck()
 {
-    sudo which git > /usr/bin/git 2>&1
-    if [ $? == "1" ] ; then
+    ls /usr/bin | grep --quiet -c 'git'
+    if [ $? > 0 ] ; then
         installed=true
     else
         installed=false
+        which apt-get > /dev/null 2>&1
+        if [ $? == "1" ] ; then
+            sudo apt-get install git
+        fi
     fi
 }
-Test()
-{
-    if [ ls /usr/bin | grep -c 'git' > 0 ] ; then
-        installed=true
-    else
-        installed=false
-    fi
-    echo $installed
-#gitCheck
-}
-Test
-if [ $installed==false ] ; then
-    echo "please install git and press enter to continue"
-    read $continue
-    #gitCheck
-    Test
-fi
-if [ $installed==true ] ; then
-    echo "Test"
-fi
-
+gitCheck
 WPUT()
 {
     which apt-get > /dev/null 2>&1
