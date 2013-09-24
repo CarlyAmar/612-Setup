@@ -6,14 +6,38 @@ echo "what is your github email address"
 read email
 echo "Go to Github and fork Anirudh's repository for this year called"
 echo $repo
-echo "press enter to continue"
+echo "press [enter] to continue"
 read -s continue
-echo "is git installed [y] [n]"
-read installed
-if [ $installed == n ] ; then
+gitCheck() 
+{
+    sudo which git > /usr/bin/git 2>&1
+    if [ $? == "1" ] ; then
+        installed=true
+    else
+        installed=false
+    fi
+}
+Test()
+{
+    if [ ls /usr/bin | grep -c 'git' > 0 ] ; then
+        installed=true
+    else
+        installed=false
+    fi
+    echo $installed
+#gitCheck
+}
+Test
+if [ $installed==false ] ; then
     echo "please install git and press enter to continue"
     read $continue
+    #gitCheck
+    Test
 fi
+if [ $installed==true ] ; then
+    echo "Test"
+fi
+
 WPUT()
 {
     which apt-get > /dev/null 2>&1
@@ -93,4 +117,4 @@ UCPP()
 #SSH
 #GitConfig
 #GitRepo
-UCPP
+#UCPP
