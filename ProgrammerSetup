@@ -132,6 +132,22 @@ Python2()
     echo "Press enter when installed"
     read Continue
 }
+Tcl()
+{
+    wget http://www.activestate.com/activetcl/downloads/thank-you?dl=http://downloads.activestate.com/ActiveTcl/releases/8.5.14.0/ActiveTcl8.5.14.0.296777-linux-ix86-threaded.tar.gz ~/.temp/tcl
+    tar -xvf ~/.temp/tcl
+    cd ~/.temp
+    sudo make install
+}
+Curl()
+{
+    wget http://curl.askapache.com/download/curl-7.32.0.tar.gz ~/.temp/curl
+    tar -xvf ~/.temp/curl
+    cd ~/.temp/c*
+    ./configure
+    sudo make
+    sudo make install
+}
 repo="612-2013"
 echo "what is your username"
 read username
