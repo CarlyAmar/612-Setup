@@ -1,49 +1,31 @@
 #!/bin/bash
-gitCheck()
-{
-    ls /usr/bin | grep --quiet -c 'git'
-    if [ $? > 0 ] ; then
-        installed=true
-    else
-        installed=false
-        which apt-get > /dev/null 2>&1
-        if [ $? == "1" ] ; then
-            sudo apt-get install git
-        fi
-        which yum > /dev/null 2>&1
-        fi [ $? == "1" ] ; then
-            sudo yum install git
-        fi
-        which zypper > /dev/null 2>&1
-        if [ $? == "1" ] ; then
-            sudo zypper install git
-        fi
-        which pacman > /dev/null 2>&1
-        if [ $? == "1" ] ; then
-            sudo pacman -S git
-        fi  
-    fi
-    echo "Press enter when/if git is installed"
-    read Continue
-}
+#Works with Ubuntu only. For other distros, change out apt-get with the package
+#Manager of your distro and the ppa. If it is not in your distro's repos, then 
+#you must compile from source. A past commit should have partly working code to
+#compile the dependencies for ucpp from source and have some support for other package
+#managers
+repo="612-2014"
+robotics=pwd
 SSH()
 {
     ssh-keygen -C $email
-    echo "your code is:"
+    echo "your code is:\n"
     cat ~/.ssh/id_rsa.pub
-    echo "Press enter when code is pasted to github"
+    echo "\nPress enter when code is pasted to github"
     read -s continue
     ssh-add
     ssh -vT git@github.com
     echo "did keygen work? [y] [n]"
     read keygen
     if [ $keygen == n ] ; then
+        echo "Sorry, try manually configuring ssh"
         exit
     fi
 }
 GitConfig()
 {
-    echo "what is your name"
+    sudo apt-get install git
+    echo "what is your name (irl)"
     read $name
     git config --global user.name $name
     git config --global user.email "$email"
@@ -57,109 +39,28 @@ GitRepo()
 }
 UCPP()
 {
-    WINE
-    Wput
-    Python2
-    Tcl
-    Curl
-    git clone git@github.com:anidev/ucpp
-    sudo echo "\"export PATH=\"$PATH:~/robotics/ucpp/ucpp" >> ~/.bashrc
-    ucpp setup -t 612
-    ucpp init
-    ucpp configure
-}
-WINE()
-{
-    which apt-get > /dev/null 2>&1
-    if [ $? == "1" ] ; then
     sudo add-apt-repository ppa:ubuntu-wine/ppa
     sudo apt-get update
-    sudo apt-get install wine1.5
-    fi
-    which yum > /dev/null 2>&1
-    if [ $? == "1" ] ; then
-        sudo yum install wine
-    fi
-    which zypper > /dev/null 2>&1
-    if [ $? == "1" ] ; then
-        sudo zypper install wine
-    fi
-    which pacman > /dev/null 2>&1
-    if [ $? == "1" ] ; then
-        sudo pacman -S wine
-    fi  
+    sudo apt-get install wine tcl curl wput python2.7
+    git clone http://www.github.com:anidev/ucpp
+    sudo echo "\"export PATH=\"\$PATH:~/$robotics/ucpp/ucpp\"" >> ~/.bashrc
+    #You may have to change the above path based on your robotics folder
+    ucpp setup -t 612
+    cd ./$repo
+    ucpp init
+    ucpp configure
+    echo "Now try running \"make\""
 }
-WPUT()
-{
-    which apt-get > /dev/null 2>&1
-    if [ $? =="1" ] ; then
-    wget "http://sourceforge.net/projects/wput/files/wput/0.6/wput_0.6-1_i386.deb/download?use_mirror=hivelocity&download=" -O wput.deb
-    sudo dpkg -i wput.deb
-    sudo apt-get install python2
-    wget http://sourceforge.net/projects/tcl/files/Tcl/8.4.20/tcl8.4.20-src.tar.gz/download?use_mirror=hivelocity -0 tcl.tar.gz
-    tar -x tcl.tar.gz
-    git clone git@github:jkbr/httpie
-    cd httpie
-    ./configure
-    sudo make
-    sudo make installed
-    fi
-}
-Python2()
-{
-    ls /usr/bin | grep --quiet -c 'python'
-    if [ $? > 0 ] ; then
-        installed=true
-    else
-        installed=false
-        which apt-get > /dev/null 2>&1
-        if [ $? == "1" ] ; then
-            sudo apt-get install python2.7
-        fi
-        which yum > /dev/null 2>&1
-        fi [ $? == "1" ] ; then
-            sudo yum install python2.7
-        fi
-        which zypper > /dev/null 2>&1
-        if [ $? == "1" ] ; then
-            sudo zypper install python2.7
-        fi
-        which pacman > /dev/null 2>&1
-        if [ $? == "1" ] ; then
-            sudo pacman -S python2.7
-        fi  
-    fi
-    echo "Press enter when installed"
-    read Continue
-}
-Tcl()
-{
-    wget http://www.activestate.com/activetcl/downloads/thank-you?dl=http://downloads.activestate.com/ActiveTcl/releases/8.5.14.0/ActiveTcl8.5.14.0.296777-linux-ix86-threaded.tar.gz ~/.robotemp/tcl
-    tar -xvf ~/.robotemp/tcl
-    cd ~/.robotemp
-    sudo make install
-}
-Curl()
-{
-    wget http://curl.askapache.com/download/curl-7.32.0.tar.gz ~/.robotemp/curl
-    tar -xvf ~/.robotemp/curl
-    cd ~/.robotemp/c*
-    ./configure
-    sudo make
-    sudo make install
-    rm -rf ~/.robotemp
-}
-repo="612-2013"
 echo "what is your username"
 read username
 echo "what is your github email address"
 read email
 echo "Go to Github and fork Anirudh's repository for this year called"
 echo $repo
-echo "press [enter] to continue"
+echo "press [enter] if info is correct"
 read -s continue
-#gitCheck
-#SSH
-#GitConfig
-#GitRepo
-#UCPP
+
+GitConfig
+SSH
+GitRepo
+UCPP
