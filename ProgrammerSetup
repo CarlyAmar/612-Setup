@@ -8,6 +8,7 @@ repo="612-2014"
 robotics=pwd
 SSH()
 {
+    mkdir ~/.ssh
     ssh-keygen -C $email
     echo "your code is:\n"
     cat ~/.ssh/id_rsa.pub
